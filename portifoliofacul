@@ -1,0 +1,81 @@
+show databases; 
+
+create database db_faculdade_sistema;
+
+use db_faculdade_sistema;
+
+show tables;
+
+desc tbl_aluno;
+
+create table tbl_professor (
+	id_professor int not null primary key auto_increment,
+	nome_professor varchar(100) not null,
+               especializacao varchar(100) not null
+    );
+create table tbl_curso (
+	id_curso int not null primary key auto_increment,
+	carga_horaria int not null
+);
+create table tbl_materia (
+	id_materia int not null primary key auto_increment,
+                nome_materia varchar(100) not null
+);
+create table tbl_turma(
+	id_turma int not null primary key auto_increment,
+	semestre varchar(100) not null,
+                id_professor int not null,
+	foreign key (id_professor) references tbl_professor(id_professor)
+);
+
+ALTER TABLE tbl_turma ADD id_curso int not null,
+add foreign key (id_curso) references tbl_curso (id_curso);
+
+create table tbl_aluno(
+	id_aluno int not null primary key auto_increment,
+      	 nome_aluno varchar(100) not null,
+    	data_nascimento date not null,
+   	 matricula varchar(45),
+   	 id_turma int not null,
+ foreign key (id_turma) references tbl_turma (id_turma)
+);
+create table tbl_email(
+	id_email int not null primary key auto_increment,
+    	email varchar(255) not null,
+  	 id_aluno int not null,
+    	foreign key (id_aluno) references tbl_aluno (id_aluno)
+);
+create table tbl_telefone(
+	id_telefone int not null primary key auto_increment,
+   	telefone decimal,
+    	id_aluno int not null,
+   	foreign key (id_aluno) references tbl_aluno (id_aluno)
+);
+create table tbl_endereco(
+	id_endereco int not null primary key auto_increment,
+    	rua varchar(100) not null,
+    	bairro varchar(45) not null,
+    	cidade varchar(45) not null,
+    	pais varchar(45) not null,
+    	cep int not null,
+   	id_aluno int not null,
+    	foreign key (id_aluno) references tbl_aluno (id_aluno)
+);
+create table tbl_nota(
+	id_nota int not null primary key auto_increment,
+   	nota float not null,
+	id_aluno int not null,
+   	foreign key (id_aluno) references tbl_aluno (id_aluno)
+);
+ALTER TABLE tbl_nota ADD id_materia int not null,
+add foreign key (id_materia) references tbl_materia (id_materia);
+
+create table tbl_turma_materia(
+	id_turma_materia int not null primary key auto_increment,
+	id_turma int not null,
+    	constraint FK_turma_materia_turma
+	foreign key (id_turma) references tbl_turma (id_turma),
+	id_materia int not null,
+	constraint FK_turma_materia_materia
+	foreign key (id_materia) references tbl_materia (id_materia)
+);
